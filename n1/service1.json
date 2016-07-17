@@ -1,0 +1,7 @@
+{
+	"service": {
+		"name": "service1",
+		"tags": ["web"],
+		"port": 9001
+	}
+}

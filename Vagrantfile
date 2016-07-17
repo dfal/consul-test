@@ -15,8 +15,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true, type: "rsync"
 
-  #config.vm.provision "shell", path: "./scripts/install-consul.sh"
-
   (0..2).each do |n|
 	config.vm.define "n#{n}" do |node|
 		node.vm.hostname = "n#{n}"
@@ -42,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 					cmd: "agent -server -bind=172.20.20.10 -client=172.20.20.10 -ui -bootstrap-expect=1"
 			else
 				d.run "consul", image: "consul",
-					args: "-d --net=host -e 'CONSUL_LOCAL_CONFIG={\"leave_on_terminate\": true}'",
+					args: "-d --net=host -e 'CONSUL_LOCAL_CONFIG={\"leave_on_terminate\": true}' -v /consul/config:/consul/config",
 					cmd: "agent -bind=172.20.20.#{n+10} -join=172.20.20.10"
 			end
 		end

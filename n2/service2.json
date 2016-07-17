@@ -1,0 +1,7 @@
+{
+	"service": {
+		"name": "service2",
+		"tags": ["bgp"],
+		"port": 9002
+	}
+}
