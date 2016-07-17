@@ -22,11 +22,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		node.vm.hostname = "n#{n}"
 		node.vm.network "private_network", ip: "172.20.20.#{n+10}", virtualbox__intnet: true
 
-		#if n > 0 then
-		#	node.vm.network "forwarded_port", guest: 9090+n-1, host: 9090+n-1
-		#else
-		#	node.vm.network "forwarded_port", guest: 8500, guest_ip: "172.20.20.10", host: 8500
-		#end
+		if n == 0 then
+			node.vm.network "forwarded_port", guest: 8500, guest_ip: "172.20.20.10", host: 8500
+		end
 	
 		node.vm.synced_folder "./n#{n}", "/n#{n}"
 		if File.exist?("./n#{n}/provision.sh") then
