@@ -2,6 +2,11 @@
 	"service": {
 		"name": "service2",
 		"tags": ["bgp"],
-		"port": 9002
+		"port": 9002,
+		"check": {
+			"http": "http://localhost:9091/check",
+			"interval": "5s",
+			"timeout": "1s"
+		}
 	}
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/benschw/srv-lb/lb"
 	"github.com/op/go-logging"
 	"io/ioutil"
 	"net/http"
@@ -31,8 +32,20 @@ func main() {
 }
 
 func runPolling() {
-	for i := 0; ; i++ {
-		response, err := http.Get("http://172.20.20.11:9090/Dima")
+	for {
+
+		log.Info("Sleeping...")
+		time.Sleep(5 * time.Second)
+
+		service1 := lb.New(lb.DefaultConfig(), "service1.service.dc1.consul")
+		address, err := service1.Next()
+
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		response, err := http.Get(fmt.Sprintf("http://%s/Dima", address.String())) //http.Get("http://172.20.20.11:9090/Dima")
 		if err != nil {
 			log.Error(err)
 		} else {
@@ -45,10 +58,6 @@ func runPolling() {
 				log.Notice(string(responseBody))
 			}
 		}
-
-		log.Info("Sleeping...")
-
-		time.Sleep(5 * time.Second)
 	}
 }
 
